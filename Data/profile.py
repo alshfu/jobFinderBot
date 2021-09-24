@@ -23,7 +23,7 @@ class Profile:
 
     @staticmethod
     def create_new_user():
-        # TODO skapa ny Användare med hjälp från linkedin sida
+        # TODO skapa ny Användare med hjälp av linkedin sida
         create_profiles_table()
         print('Ange huvud information om dig själv')
         # TODO hämta namn och adress från upplysning
