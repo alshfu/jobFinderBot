@@ -6,7 +6,7 @@ from stripe.http_client import requests
 from columnar import columnar
 from click import style
 from tabulate import tabulate
-from DB.data_base import check_ad_status, add_ad_to_database, update_ad_status_id
+from DB.data_base import *
 from Web_data.helper import check_if_url_ready_to_be_used, open_link_in_chrome
 from functions import delay_print, status_style, yes_or_no
 
@@ -23,6 +23,8 @@ def go_to_ad_url(url, ad_id):
 
 
 class PlatsBank:
+    create_ad_list_table()
+
     def __init__(self):
         self.job_list = []
         self.ad_url = ''

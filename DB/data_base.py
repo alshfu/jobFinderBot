@@ -1,8 +1,8 @@
 import sqlite3
 import os
 
-# db = os.path.abspath('pd.db')
-db = os.path.abspath('C://Users//User//PycharmProjects//jobFinderBot//DB//pd.db')
+DB_DIR = os.path.dirname(os.path.realpath(__file__))
+db = os.path.abspath(DB_DIR+'//pd.db')
 
 
 def create_ad_list_table():
