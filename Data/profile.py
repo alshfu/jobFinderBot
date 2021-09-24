@@ -3,27 +3,30 @@ from DB.data_base import create_profiles_table, add_user_to_database, get_profil
 
 class Profile:
 
-    def __init__(self, id_user):
-        user_data = get_profile(id_user)[0]
-        self.email = user_data[1]
-        self.password = user_data[2]
-        self.password_secondary = user_data[3]
-        self.cv_file_location = user_data[4]
-        self.cover_later_file_location = user_data[5]
-        self.f_name = user_data[6]
-        self.l_name = user_data[7]
-        self.telefon = user_data[8]
-        self.b_date = user_data[9]
-        self.street = user_data[10]
-        self.street_number = user_data[11]
-        self.zip_code = user_data[12]
-        self.town = user_data[13]
-        self.ssn = user_data[14]
+    def __init__(self, id_user=None):
+        if id_user is not None:
+            user_data = get_profile(id_user)[0]
+            self.email = user_data[1]
+            self.password = user_data[2]
+            self.password_secondary = user_data[3]
+            self.cv_file_location = user_data[4]
+            self.cover_later_file_location = user_data[5]
+            self.f_name = user_data[6]
+            self.l_name = user_data[7]
+            self.telefon = user_data[8]
+            self.b_date = user_data[9]
+            self.street = user_data[10]
+            self.street_number = user_data[11]
+            self.zip_code = user_data[12]
+            self.town = user_data[13]
+            self.ssn = user_data[14]
 
     @staticmethod
     def create_new_user():
+        # TODO skapa ny Användare med hjälp från linkedin sida
         create_profiles_table()
         print('Ange huvud information om dig själv')
+        # TODO hämta namn och adress från upplysning
         ssn = input('person nummer: ')
         f_name = input('förnamn: ')
         l_name = input('efternamn: ')

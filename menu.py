@@ -2,6 +2,7 @@ from consolemenu import *
 from consolemenu.format import MenuBorderStyleType
 from consolemenu.items import *
 
+from Data.profile import Profile
 from Web_data.arbetsförmedlingen import Arbetsformedlingen
 from functions import yes_or_no
 from plats_bank import PlatsBank
@@ -41,7 +42,9 @@ def aktivitetsrapport():
 def main_menu():
     menu = ConsoleMenu("Huvud menu", "Automatiserad jobbsökning", formatter=menu_format())
     palts_banken = SubmenuItem("Platsbanken", palts_bank_menu(), menu)
+    create_new_user = FunctionItem("Skapa en ny profile", Profile().create_new_user, '')
     arbetsformedling = FunctionItem("Skapa aktivitetsrapport rapport", aktivitetsrapport, '')
     menu.append_item(palts_banken)
     menu.append_item(arbetsformedling)
+    menu.append_item(create_new_user)
     menu.show()
