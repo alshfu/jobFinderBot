@@ -1,3 +1,6 @@
+import selenium
+from selenium.common.exceptions import NoSuchElementException
+
 from Web_data.chrome import Browser
 from functions import delay_print
 from time import sleep
@@ -37,7 +40,10 @@ class AcademicWork(Browser):
     def academic_work_action(self, url):
         self.driver.get(url)
         sleep(5)
-        self.driver.find_element_by_id('onetrust-accept-btn-handler').click()
+        try:
+            self.driver.find_element_by_id('onetrust-accept-btn-handler').click()
+        except NoSuchElementException:
+            pass
         sleep(1)
         self.driver.find_elements_by_class_name('aw-block-button')[1].click()
         print(
