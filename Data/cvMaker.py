@@ -28,5 +28,4 @@ def information_getter(string: str) -> []:
 
 
 if __name__ == '__main__':
-    data = information_getter('8607129692')
-    print(data['city'])
+    pass
