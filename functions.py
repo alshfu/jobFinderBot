@@ -61,6 +61,13 @@ def status_style(status_id, string):
         return click.style(string, fg='white')
 
 
+def status_helper():
+    print(click.style('Ingen information om annons sida', fg='cyan'))
+    print(click.style('Det fins fel och annonsen måste kontrolleras', fg='red'))
+    print(click.style('Redan ansökt och klar för  aktivitets rapportering', fg='green'))
+    print(click.style('Redo till ansökan', fg='yellow'))
+
+
 def wait_timer(t):
     while t:
         sys.stdout.write(str(t) + " ")

@@ -23,6 +23,7 @@ def check_if_url_ready_to_be_used(url):
         return True
     elif 'randstad' in url:
         print("Ranstad")
+        return True
     else:
         return False
 

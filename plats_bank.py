@@ -8,11 +8,11 @@ from click import style
 from tabulate import tabulate
 from DB.data_base import *
 from Web_data.helper import check_if_url_ready_to_be_used, open_link_in_chrome
-from functions import delay_print, status_style, yes_or_no
+from functions import delay_print, status_style, yes_or_no, status_helper
 
 
 def go_to_ad_url(url, ad_id):
-    if yes_or_no('Ansök den här tjänst'):
+    if yes_or_no('Ansök den här tjänst '):
         try:
             open_link_in_chrome(url)
             update_ad_status_id(ad_id, 2)
@@ -108,13 +108,23 @@ class PlatsBank:
                     status_style(status, str(hit['headline'])),
                     status_style(status, str(hit['employer']['name'])),
                     status_style(status, str(hit['workplace_address']['municipality']))])
-        table = columnar(job_list_table, table_headers, no_borders=False, terminal_width=500)
-        delay_print('', table, 0)
-        if yes_or_no("Ansök lediga tjänster ") is True:
-            self.submit_application()
+        try:
+            table = columnar(job_list_table, table_headers, no_borders=False, terminal_width=500)
+            delay_print('', table, 0)
+            redo_status = False
+            for job in self.job_list:
+                if job[1] == 3:
+                    redo_status = True
+            status_helper()
+            if redo_status is True:
+                if yes_or_no("Ansök lediga tjänster ") is True:
+                    self.submit_application()
+            else:
+                pass
+        except IndexError:
+            print('Din sök fras gav inga resultat')
 
     def submit_application(self):
-        print('submit_application')
         for ad in self.job_list:
             if ad[1] == 3:
                 self.get_full_ad_info(ad[0])
