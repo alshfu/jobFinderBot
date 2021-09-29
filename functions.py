@@ -57,6 +57,9 @@ def status_style(status_id, string):
     elif status_id == 4:
         # anons sida inte med lista
         return click.style(string, fg='cyan')
+    elif status_id == 5:
+        # anons sida inte med lista
+        return click.style(string, fg='blue')
     else:
         return click.style(string, fg='white')
 
@@ -66,6 +69,7 @@ def status_helper():
     print(click.style('Det fins fel och annonsen måste kontrolleras', fg='red'))
     print(click.style('Redan ansökt och klar för  aktivitets rapportering', fg='green'))
     print(click.style('Redo till ansökan', fg='yellow'))
+    print(click.style('Ansökt och rapporterad', fg='blue'))
 
 
 def wait_timer(t):

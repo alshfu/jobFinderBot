@@ -34,6 +34,7 @@ def open_link_in_chrome(url):
         return True
     elif 'randstad' in url:
         Ranstad().ranstad_action(url)
+        return True
     else:
         print("No it is not ready for use")
         return False
