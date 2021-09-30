@@ -1,10 +1,8 @@
-import selenium
 from selenium.common.exceptions import NoSuchElementException
 
 from Web_data.chrome import Browser
-from functions import delay_print
+from functions import delay_print, table_options
 from time import sleep
-from columnar import columnar
 
 
 def tab_info(experience_list_item_container, headers):
@@ -13,14 +11,7 @@ def tab_info(experience_list_item_container, headers):
         educations_information.append([card.find_elements_by_class_name('title')[0].text,
                                        card.find_elements_by_class_name('interval')[0].text,
                                        card.find_elements_by_class_name('type')[0].text])
-    educations_table = columnar(educations_information,
-                                headers,
-                                justify='c',
-                                no_borders=False,
-                                terminal_width=500,
-                                min_column_width=35,
-                                max_column_width=35)
-    delay_print('', educations_table, t=0)
+    table_options(educations_information, headers)
 
 
 def section_title(title):

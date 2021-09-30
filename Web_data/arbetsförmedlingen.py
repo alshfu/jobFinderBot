@@ -1,8 +1,6 @@
-from columnar import columnar
-
 from DB.data_base import get_all_information, update_ad_status_id
 from Web_data.chrome import Browser
-from functions import wait_timer, delay_print, status
+from functions import wait_timer, delay_print, status, table_options
 from selenium.webdriver.support.ui import Select
 
 
@@ -20,14 +18,7 @@ def tab_info(data):
                             action[3],
                             status(action[6])])
 
-    action_info = columnar(action_info,
-                           headers,
-                           justify='c',
-                           no_borders=False,
-                           terminal_width=500,
-                           min_column_width=35,
-                           max_column_width=35)
-    delay_print('', action_info, t=0)
+    table_options(action_info, headers)
 
 
 def get_action_for_rapport():
@@ -105,7 +96,7 @@ class Arbetsformedlingen(Browser):
 
         delay_print(string=info_string_to_display(date, job_name, employer_name), t=0.2)
         self.driver.find_element_by_id('submitButton').click()
-        delay_print(string='Hämtar nästa activitet .........', t=0.2)
+        delay_print(string='Hämtar nästa aktivitet .........', t=0.2)
 
 
 if __name__ == '__main__':

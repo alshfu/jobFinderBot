@@ -2,13 +2,30 @@ import sqlite3
 import os
 
 DB_DIR = os.path.dirname(os.path.realpath(__file__))
-db = os.path.abspath(DB_DIR+'//pd.db')
+db = os.path.abspath(DB_DIR + '//pd.db')
+
+
+def db_open_connect():
+    conn = sqlite3.connect(db)
+    cursor = conn.cursor()
+    return conn, cursor
+
+
+def db_close_connect(cursor, conn):
+    data = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return data
+
+
+def db_close_connect_with_out_return(sql, cursor, conn):
+    cursor.execute(sql)
+    conn.commit()
+    conn.close()
 
 
 def create_ad_list_table():
-    conn = sqlite3.connect(db)
-    # Creating a cursor object using the cursor() method
-    cursor = conn.cursor()
+    conn, cursor = db_open_connect()
     sql = '''CREATE TABLE IF NOT EXISTS AD_LIST(
        id integer PRIMARY KEY,
        ad_id int NOT NULL UNIQUE,
@@ -18,15 +35,11 @@ def create_ad_list_table():
        employer_name char(120),
        status INT
     )'''
-    cursor.execute(sql)
-    conn.commit()
-    conn.close()
+    db_close_connect_with_out_return(sql, cursor, conn)
 
 
 def create_profiles_table():
-    conn = sqlite3.connect(db)
-    # Creating a cursor object using the cursor() method
-    cursor = conn.cursor()
+    conn, cursor = db_open_connect()
     sql = ('CREATE TABLE IF NOT EXISTS USER_PROFILE(\n'
            '       id integer PRIMARY KEY,\n'
            '       email char(120),\n'
@@ -45,14 +58,11 @@ def create_profiles_table():
            '       ssn char(120),\n'
            '       status INT\n'
            '    )')
-    cursor.execute(sql)
-    conn.commit()
-    conn.close()
+    db_close_connect_with_out_return(sql, cursor, conn)
 
 
 def add_user_to_database(user_data):
-    conn = sqlite3.connect(db)
-    cursor = conn.cursor()
+    conn, cursor = db_open_connect()
     cursor.execute("insert into USER_PROFILE ("
                    "email,"
                    "password,"
@@ -89,18 +99,13 @@ def add_user_to_database(user_data):
 
 
 def get_profile(user_id):
-    conn = sqlite3.connect(db)
-    cursor = conn.cursor()
+    conn, cursor = db_open_connect()
     cursor.execute("SELECT * FROM USER_PROFILE WHERE id = ?", (user_id,))
-    data = cursor.fetchall()
-    conn.commit()
-    conn.close()
-    return data
+    db_close_connect(cursor, conn)
 
 
 def add_ad_to_database(ad_data):
-    conn = sqlite3.connect(db)
-    cursor = conn.cursor()
+    conn, cursor = db_open_connect()
     cursor.execute("insert into AD_LIST (ad_id,"
                    "title,"
                    "city,"
@@ -109,39 +114,25 @@ def add_ad_to_database(ad_data):
                    "status) values(?,?,?,?,?,?)",
                    (ad_data[0], ad_data[1], ad_data[2], ad_data[3], ad_data[4], ad_data[5]))
     conn.commit()
-    # Closing the connection
     conn.close()
 
 
 def get_ad_data_from_db(ad_id):
-    conn = sqlite3.connect(db)
-    cursor = conn.cursor()
+    conn, cursor = db_open_connect()
     cursor.execute("SELECT * FROM AD_LIST WHERE ad_id = ?", (ad_id,))
-    data = cursor.fetchall()
-    conn.commit()
-    conn.close()
-    return data
+    db_close_connect(cursor, conn)
 
 
 def get_all_information():
-    # Connecting to sqlite
-    conn = sqlite3.connect(db)
-    # Creating a cursor object using the cursor() method
-    cursor = conn.cursor()
+    conn, cursor = db_open_connect()
     cursor.execute("SELECT * FROM AD_LIST")
-    data = cursor.fetchall()
-    conn.commit()
-    conn.close()
-    return data
+    db_close_connect(cursor, conn)
 
 
 def check_ad_status(ad_id):
-    conn = sqlite3.connect(db)
-    cursor = conn.cursor()
+    conn, cursor = db_open_connect()
     cursor.execute("SELECT status FROM AD_LIST WHERE ad_id = ?", (ad_id,))
-    data = cursor.fetchall()
-    conn.commit()
-    conn.close()
+    data = db_close_connect(cursor, conn)
     if len(data) == 0:
         return None
     else:
@@ -149,10 +140,7 @@ def check_ad_status(ad_id):
 
 
 def update_ad_status_id(ad_id, status_id):
-    # print("Update data for ad_id: " + str(ad_id) + "For status " + status_id)
-    conn = sqlite3.connect(db)
-    # Creating a cursor object using the cursor() method
-    cursor = conn.cursor()
+    conn, cursor = db_open_connect()
     cursor.execute("UPDATE AD_LIST  SET status = ?  WHERE ad_id = ?", (status_id, ad_id))
     conn.commit()
     cursor.close()

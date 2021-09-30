@@ -2,6 +2,7 @@ import sys
 import time
 
 import click
+from columnar import columnar
 
 
 def delay_print(title='', string='', t=0, color=''):
@@ -9,7 +10,7 @@ def delay_print(title='', string='', t=0, color=''):
     if title != '':
         sys.stdout.write(title + ": ")
     if title == '|Password':
-        for c in string:
+        for _ in string:
             sys.stdout.write('*')
             sys.stdout.flush()
             time.sleep(0.25)
@@ -37,7 +38,7 @@ def status(status_id):
     elif status_id == 4:
         return 'Anons sida inte med regel lista'
     elif status_id == 5:
-        return 'Ansökt och raporterad'
+        return 'Ansökt och rapporterad'
     else:
         return 'Inte med i lista'
 
@@ -96,9 +97,16 @@ def yes_or_no(string):
         return False
 
 
+def table_options(educations_information, headers):
+    educations_table = columnar(educations_information,
+                                headers,
+                                justify='c',
+                                no_borders=False,
+                                terminal_width=500,
+                                min_column_width=35,
+                                max_column_width=35)
+    delay_print('', educations_table, t=0)
+
+
 if __name__ == '__main__':
-    print(status_style(0, 'Demo Test'))
-    print(status_style(1, 'Demo Test'))
-    print(status_style(2, 'Demo Test'))
-    print(status_style(3, 'Demo Test'))
-    print(status_style(4, 'Demo Test'))
+    pass

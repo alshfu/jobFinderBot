@@ -7,11 +7,11 @@ def check_if_url_ready_to_be_used(url):
     # elif 'pnty-apply.ponty-system.se' in url:
     #     ponty_action(url)
     # elif 'www.recruto.se' in url:
-    #     recruto_action(url)
+    #     reruto_action(url)
     # elif 'softwareskills' in url:
     #     softwareskills_action(url)
     # elif 'semconsweden' in url:
-    #     semconsweden_actoin(url)
+    #     semconsweden_action(url)
     # elif 'altiusconsulting' in url:
     #     altiusconsulting_action(url)
     # elif 'www.infotiv.se' in url:
