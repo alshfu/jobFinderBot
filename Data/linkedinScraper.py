@@ -2,6 +2,8 @@ import selenium
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
+import json
+import codecs
 
 
 class Person:
@@ -52,7 +54,7 @@ class Person:
 
     def get_about_info(self) -> str:
         # core-section-container__content
-        about = self.driver.find_elements_by_class_name('core-section-container__content')[0].text
+        about = self.driver.find_elements_by_class_name('core-section-container__content')[1].text
         print('about: ' + about)
         return about
 
@@ -63,13 +65,24 @@ class Person:
         for experiences_item in experiences_items:
             organisations_name = experiences_item.find_element_by_class_name('profile-section-card__subtitle').text
             title = experiences_item.find_element_by_class_name('profile-section-card__title').text
-            date_range = experiences_item.find_element_by_class_name('date-range').text
+            date_r = experiences_item.find_element_by_class_name('date-range')
+            time_1 = date_r.find_elements_by_tag_name('time')[0].text
+            try:
+                time_2 = date_r.find_elements_by_tag_name('time')[1].text
+            except IndexError:
+                time_2 = 'Present'
+            data_range = time_1 + ' - ' + time_2
+            try:
+                description = experiences_item.find_elements_by_class_name('experience-item__description')[0].text
+            except IndexError:
+                description = ''
             location = experiences_item.find_element_by_class_name('experience-item__location').text
             experiences_data.append({
-                'organisations_name': organisations_name,
-                'title': title,
-                'date range': date_range,
-                'location': location})
+                "organisations_name": organisations_name,
+                "title": title,
+                "date range": data_range,
+                "description": description,
+                "location": location})
         return experiences_data
 
     def get_education(self) -> []:
@@ -81,9 +94,9 @@ class Person:
             education_title = education_list_item.find_elements_by_class_name('education__item--degree-info')[1].text
             date_range = education_list_item.find_elements_by_class_name('date-range')[0].text
             education_data.append({
-                'school_name': school_name,
-                'education_title': education_title,
-                'date_range': date_range
+                "school_name": school_name,
+                "education_title": education_title,
+                "date_range": date_range
             })
         return education_data
 
@@ -96,9 +109,9 @@ class Person:
             subtitle = certifications_list_item.find_elements_by_class_name('profile-section-card__subtitle')[0].text
             date_range = certifications_list_item.find_elements_by_class_name('certifications__date-range')[0].text
             certifications_data.append({
-                'title': title,
-                'subtitle': subtitle,
-                'date_range': date_range
+                "title": title,
+                "subtitle": subtitle,
+                "date_range": date_range
             })
         return certifications_data
 
@@ -110,8 +123,8 @@ class Person:
             titel = courses_list_item.find_elements_by_class_name('profile-section-card__title')[0].text
             subtitle = courses_list_item.find_elements_by_class_name('profile-section-card__subtitle')[0].text
             courses_data.append({
-                'titel': titel,
-                'subtitle': subtitle
+                "titel": titel,
+                "subtitle": subtitle
             })
         return courses_data
 
@@ -124,9 +137,9 @@ class Person:
             subtitle = projects__list_item.find_elements_by_class_name('profile-section-card__subtitle')[0].text
             info = projects__list_item.find_elements_by_class_name('profile-section-card__meta')[0].text
             projects_data.append({
-                'title': title,
-                'subtitle': subtitle,
-                'info': info
+                "title": title,
+                "subtitle": subtitle,
+                "info": info
             })
         return projects_data
 
@@ -138,31 +151,43 @@ class Person:
             title = languages_list_item.find_elements_by_class_name('profile-section-card__title')[0].text
             subtitle = languages_list_item.find_elements_by_class_name('profile-section-card__subtitle')[0].text
             languages_data.append({
-                'title': title,
-                'subtitle': subtitle
+                "title": title,
+                "subtitle": subtitle
             })
         return languages_data
 
+    def get_all_data(self) -> {}:
+        data = {
+            "github": "https://github.com/alshfu",
+            "url": "https://www.linkedin.com/in/alshfu/",
+            "phone": "0736960561",
+            "email": self.login,
+            "name": self.get_name(),
+            "headline": self.get_headline(),
+            "about_info": self.get_about_info(),
+            "experiences": self.get_experiences(),
+            "education": self.get_education(),
+            "certifications": self.get_certifications(),
+            "courses": self.get_courses(),
+            "projects": self.get_projects(),
+            "languages": self.get_languages(),
+        }
+        return data
+
+    def create_json_file(self):
+        self.get_all_data()
+        file_name = self.get_name().replace(" ", "") + '.json'
+        with codecs.open(file_name, encoding='utf-8', mode='w') as outfile:
+            json.dump(self.get_all_data(), outfile, ensure_ascii=False)
+
+
+    def driver_close(self):
+        self.driver.close()
 
 if __name__ == '__main__':
-    login = ''
-    password = ''
-    url_page = ''
+    login = 'alshfu@gmail.com'
+    password = 'as785ghqw590!Q'
+    url_page = 'file:///C:/Users/User/Desktop/my%20link/Edit%20My%20Public%20Profile%20_%20LinkedIn.html'
     person = Person(login_name=login, pwd=password, url=url_page)
-    person.get_name()
-    person.get_headline()
-    person.get_about_info()
-    experiences = person.get_experiences()
-    educations = person.get_education()
-    certifications = person.get_certifications()
-    languages = person.get_languages()
-    courses = person.get_courses()
-    projects = person.get_projects()
-    print(projects)
-    print(courses)
-    print(languages)
-    print(certifications)
-    print(educations)
-
-
-
+    person.create_json_file()
+    person.driver_close()

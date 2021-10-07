@@ -1,3 +1,5 @@
+import codecs
+import json
 import os
 
 head_of_html = '''<!DOCTYPE html>
@@ -23,116 +25,140 @@ head_of_html = '''<!DOCTYPE html>
 '''
 
 
-def create_body(data) -> str:
+def create_education_items(educations: [] = []) -> str:
+    html_begin = '''<div class="education-container container-block">
+                    <h2 class="container-block-title">Education</h2>'''
+    education_html = ''
+    simple = '''
+                    <div class="item">
+                        <h4 class="degree">BSc in Applied Mathematics</h4>
+                        <h5 class="meta">Bristol University</h5>
+                        <div class="time">2012 - 2016</div>
+                    </div><!--//item-->'''
+    for education in educations:
+        education_html = '''<div class="item">
+        <h4 class="degree">''' + education['education_title'] + '''</h4>
+        <h5 class="meta">''' + education['school_name'] + '''</h5>
+        <div class="time">''' + education['date_range'] + '''</div>
+        </div><!--//item-->''' + education_html
+
+    html_end = '''</div>'''
+    return html_begin + education_html + html_end
+
+
+def create_languages_items(languages: [] = []) -> str:
+    html_begin = '''
+    <div class="languages-container container-block">
+        <h2 class="container-block-title">Languages</h2>
+        <ul class="list-unstyled interests-list">'''
+    items = ''
+    for language in languages:
+        items = '''
+        <li>''' + language['title'] + '''
+            <span class="lang-desc">(''' + language['subtitle'] + ''')</span>
+        </li>''' + items
+
+    html_end = '''
+        </ul>
+    </div>'''
+    return html_begin + items + html_end
+
+
+def create_interests_items(interests: [] = []) -> str:
+    # TODO göra klar
+    return '''
+    <div class="interests-container container-block">
+        <h2 class="container-block-title">Interests</h2>
+        <ul class="list-unstyled interests-list">
+            <li>Climbing</li>
+            <li>Snowboarding</li>
+            <li>Cooking</li>
+        </ul>
+    </div>'''
+
+
+def create_summary_item(headline: str) -> str:
+    return '''
+        <h2 class="section-title"><span class="icon-holder"><i class="fas fa-user"></i></span>Career Profile</h2>
+        <div class="summary">
+            <p>''' + headline + '''</p>
+        </div><!--//summary-->
+    '''
+
+
+def create_experiences_items(experiences: [] = []) -> str:
+    html_begin = '''
+    <h2 class="section-title"><span class="icon-holder"><i class="fas fa-briefcase"></i></span>Experiences</h2>
+    '''
+    items = ''
+    for experience in experiences:
+        items = '''
+        <div class="item">
+            <div class="meta">
+                <div class="upper-row">
+                    <h3 class="job-title">''' + experience['title'] + '''</h3>
+                    <div class="time">''' + experience['date range'] + '''</div>
+                </div><!--//upper-row-->
+                <div class="company">''' + experience['location'] + ''', ''' + experience['organisations_name'] + '''
+                </div>
+            </div><!--//meta-->
+            <div class="details">
+                <p>''' + experience['description'] + '''</p>
+           </div><!--//details-->
+        </div><!--//item-->''' + items
+
+    return html_begin + items
+
+
+def create_body(json_data) -> str:
     body_of_html = '''
     <body>
         <div class="wrapper">
             <div class="sidebar-wrapper">
                 <div class="profile-container">
                     <img class="profile" src="assets/images/profile.png" alt="" />
-                    <h1 class="name">''' + data['name'] + '''</h1>
-                    <h3 class="tagline">Full Stack Developer</h3>
-                </div><!--//profile-container-->
+                    <h1 class="name">''' + json_data['name'] + '''</h1>
+                    <h3 class="tagline">''' + json_data['headline'] + '''</h3>
+                </div>
+                <!--//profile-container-->
                 <div class="contact-container container-block">
                     <ul class="list-unstyled contact-list">
-                        <li class="email"><i class="fas fa-envelope"></i><a href="mailto: yourname@email.com">alan.doe@website.com</a></li>
-                        <li class="phone"><i class="fas fa-phone"></i><a href="tel:0123 456 789">0123 456 789</a></li>
-                        <li class="website"><i class="fas fa-globe"></i><a
-                        href="https://themes.3rdwavemedia.com/bootstrap-templates/resume/orbit-free-resume-cv-bootstrap-theme-for-developers/"
-                        target="_blank">portfoliosite.com</a></li>
-                        <li class="linkedin"><i class="fab fa-linkedin-in"></i><a href="#" target="_blank">linkedin.com/in/alandoe</a></li>
-                        <li class="github"><i class="fab fa-github"></i><a href="#" target="_blank">github.com/username</a></li>
-                        <li class="twitter"><i class="fab fa-twitter"></i><a href="https://twitter.com/3rdwave_themes" target="_blank">@twittername</a></li>
+                        <li class="email">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:''' + json_data['email'] + '''">''' + json_data['email'] + '''</a>
+                        </li>
+                        <li class="phone">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:''' + json_data['phone'] + '''">''' + json_data['phone'] + '''</a>
+                        </li>
+                        <li class="linkedin"><i class="fab fa-linkedin-in"></i>
+                        <a href="''' + json_data['url'] + '''" target="_blank">''' + json_data['name'] + '''</a>
+                        </li>
+                        <li class="github"><i class="fab fa-github"></i>
+                        <a href="''' + json_data['github'] + '''" target="_blank">
+                        ''' + json_data['github'].replace('https://github.com/', '') + '''</a>
+                        </li>
                     </ul>
-                </div><!--//contact-container-->
-                <div class="education-container container-block">
-                    <h2 class="container-block-title">Education</h2>
-                    <div class="item">
-                        <h4 class="degree">MSc in Computer Science</h4>
-                        <h5 class="meta">University of London</h5>
-                            <div class="time">2016 - 2018</div>
-                    </div><!--//item-->
-                    <div class="item">
-                        <h4 class="degree">BSc in Applied Mathematics</h4>
-                        <h5 class="meta">Bristol University</h5>
-                        <div class="time">2012 - 2016</div>
-                    </div><!--//item-->
-                </div><!--//education-container-->
-    
-                <div class="languages-container container-block">
-                    <h2 class="container-block-title">Languages</h2>
-                    <ul class="list-unstyled interests-list">
-                        <li>English <span class="lang-desc">(Native)</span></li>
-                        <li>French <span class="lang-desc">(Professional)</span></li>
-                        <li>Spanish <span class="lang-desc">(Professional)</span></li>
-                    </ul>
-                </div><!--//interests-->
-    
-                <div class="interests-container container-block">
-                    <h2 class="container-block-title">Interests</h2>
-                    <ul class="list-unstyled interests-list">
-                        <li>Climbing</li>
-                        <li>Snowboarding</li>
-                        <li>Cooking</li>
-                    </ul>
-                </div><!--//interests-->
-    
+                </div>
+                <!--//contact-container-->
+                ''' + create_education_items(json_data['education']) + '''
+                <!--//education-container-->
+                ''' + create_languages_items(json_data['languages']) + '''
+                <!--//languages-->
+                <!--interests--> 
+                <!--//interests-->
             </div><!--//sidebar-wrapper-->
     
             <div class="main-wrapper">
-    
-                <section class="section summary-section">
-                    <h2 class="section-title"><span class="icon-holder"><i class="fas fa-user"></i></span>Career Profile</h2>
-                    <div class="summary">
-                        <p>Summarise your career here lorem ipsum dolor sit amet, consectetuer adipiscing elit. You can <a href="https://themes.3rdwavemedia.com/bootstrap-templates/resume/orbit-free-resume-cv-bootstrap-theme-for-developers/" target="_blank">download this free resume/CV template here</a>. Aenean commodo ligula eget dolor aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu.</p>
-                    </div><!--//summary-->
-                </section><!--//section-->
+                 <section class="section summary-section">
+                 ''' + create_summary_item(json_data['about_info']) + '''
+                 </section>
+                 <!--//section-->
     
                 <section class="section experiences-section">
-                    <h2 class="section-title"><span class="icon-holder"><i class="fas fa-briefcase"></i></span>Experiences</h2>
-    
-                    <div class="item">
-                        <div class="meta">
-                            <div class="upper-row">
-                                <h3 class="job-title">Lead Developer</h3>
-                                <div class="time">2019 - Present</div>
-                            </div><!--//upper-row-->
-                            <div class="company">Startup Hubs, San Francisco</div>
-                        </div><!--//meta-->
-                        <div class="details">
-                            <p>Describe your role here lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo.</p>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. </p>
-                        </div><!--//details-->
-                    </div><!--//item-->
-    
-                    <div class="item">
-                        <div class="meta">
-                            <div class="upper-row">
-                                <h3 class="job-title">Senior Software Engineer</h3>
-                                <div class="time">2018 - 2019</div>
-                            </div><!--//upper-row-->
-                            <div class="company">Google, London</div>
-                        </div><!--//meta-->
-                        <div class="details">
-                            <p>Describe your role here lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
-    
-                        </div><!--//details-->
-                    </div><!--//item-->
-    
-                    <div class="item">
-                        <div class="meta">
-                            <div class="upper-row">
-                                <h3 class="job-title">UI Developer</h3>
-                                <div class="time">2016 - 2018</div>
-                            </div><!--//upper-row-->
-                            <div class="company">Amazon, London</div>
-                        </div><!--//meta-->
-                        <div class="details">
-                            <p>Describe your role here lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
-                        </div><!--//details-->
-                    </div><!--//item-->
-    
-                </section><!--//section-->
+                ''' + create_experiences_items(json_data['experiences']) + '''
+                </section>
+                <!--//section-->
     
                 <section class="section projects-section">
                     <h2 class="section-title"><span class="icon-holder"><i class="fas fa-archive"></i></span>Projects</h2>
@@ -223,10 +249,12 @@ def create_body(data) -> str:
 
 
 DIR = os.path.dirname(os.path.realpath(__file__))
-data = {
-    'name': 'Malik'
-}
+file = open('AlexandrShchetinin.json', encoding="utf8")
+data = json.load(file)
 
-text_file = open(DIR + '\Orbit-Theme-master\index.html', "w")
-n = text_file.write(head_of_html + create_body(data))
-text_file.close()
+file_name = DIR + '\OrbitThemeMaster\Orbit-Theme-master\index.html'
+
+html_code = head_of_html + create_body(data)
+
+with codecs.open(file_name, encoding='utf-8', mode='w') as html_file:
+    html_file.write(html_code)
