@@ -101,7 +101,8 @@ def add_user_to_database(user_data):
 def get_profile(user_id):
     conn, cursor = db_open_connect()
     cursor.execute("SELECT * FROM USER_PROFILE WHERE id = ?", (user_id,))
-    db_close_connect(cursor, conn)
+    data = db_close_connect(cursor, conn)
+    return data
 
 
 def add_ad_to_database(ad_data):

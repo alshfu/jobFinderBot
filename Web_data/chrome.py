@@ -7,7 +7,7 @@ from Data.profile import Profile
 class Browser:
     def __init__(self):
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
-    # self.profile = Profile(1)
+        self.profile = Profile('1')
 
 
 if __name__ == '__main__':

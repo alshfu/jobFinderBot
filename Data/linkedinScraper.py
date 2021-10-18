@@ -143,6 +143,12 @@ class Person:
             })
         return projects_data
 
+    def get_profile_image(self):
+        img = self.driver.find_elements_by_class_name('top-card__profile-image-container')[0]
+        img = img.find_elements_by_tag_name('img')[0].get_attribute('src')
+        print(img)
+        return img
+
     def get_languages(self) -> []:
         languages_data = []
         languages_list = self.driver.find_elements_by_class_name('languages__list')[0]
@@ -158,6 +164,7 @@ class Person:
 
     def get_all_data(self) -> {}:
         data = {
+            "img_url": self.get_profile_image(),
             "github": "https://github.com/alshfu",
             "url": "https://www.linkedin.com/in/alshfu/",
             "phone": "0736960561",
@@ -176,7 +183,7 @@ class Person:
 
     def create_json_file(self):
         self.get_all_data()
-        file_name = self.get_name().replace(" ", "") + '.json'
+        file_name = 'cv_data.json'
         with codecs.open(file_name, encoding='utf-8', mode='w') as outfile:
             json.dump(self.get_all_data(), outfile, ensure_ascii=False)
 
@@ -189,5 +196,6 @@ if __name__ == '__main__':
     password = 'as785ghqw590!Q'
     url_page = 'file:///C:/Users/User/Desktop/my%20link/Edit%20My%20Public%20Profile%20_%20LinkedIn.html'
     person = Person(login_name=login, pwd=password, url=url_page)
+    person.get_profile_image()
     person.create_json_file()
     person.driver_close()

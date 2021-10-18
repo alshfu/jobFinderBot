@@ -1,6 +1,7 @@
 import codecs
 import json
 import os
+from random import randint
 
 head_of_html = '''<!DOCTYPE html>
 <html lang="en">
@@ -110,13 +111,91 @@ def create_experiences_items(experiences: [] = []) -> str:
     return html_begin + items
 
 
+def create_projects_items(projects: [] = []) -> str:
+    html_begin = '''
+    <h2 class="section-title">
+        <span class="icon-holder">
+            <i class="fas fa-archive"></i>
+        </span>Projects
+    </h2>
+    '''
+    items = ''
+    for project in projects:
+        items = '''
+        <div class="item">
+            <span class="project-title">
+                <a href="#">''' + project['title'] + '''</a>
+            </span> - 
+            <span class="project-tagline">
+            ''' + project['info'] + '''
+            </span>
+        </div>
+        ''' + items
+
+    return html_begin + items
+
+
+def create_certifications_items(certifications: [] = []) -> str:
+    html_begin = '''
+    <h2 class="section-title">
+        <span class="icon-holder">
+            <i class="fa fa-certificate"></i>
+        </span>Certifications
+    </h2>
+    '''
+    items = ''
+    for certification in certifications:
+        items = '''
+        <div class="item">
+            <span class="project-title">
+                <a href="#">''' + certification['subtitle'] + '''</a>
+            </span> - 
+            <span class="project-tagline">
+            ''' + certification['title'] + '''
+            </span>
+        </div>
+        ''' + items
+
+    return html_begin + items
+
+
+def create_skills_items(skills: [] = []) -> str:
+    html_begin = '''
+        <h2 class="section-title">
+            <span class="icon-holder">
+                <i class="fas fa-rocket"></i>
+            </span>Courses &amp; Proficiency
+        </h2>
+        <div class="skillset">
+        '''
+    items = ''''''
+
+    for skill in skills:
+        val = str(randint(80, 100))
+        items = '''
+        <div class="item">
+            <h3 class="level-title">''' + skill['titel'] + '''</h3>
+            <div class="progress level-bar">
+                <div class="progress-bar theme-progress-bar" 
+                     role="progressbar" 
+                     style="width: ''' + val + '''%" 
+                     aria-valuenow="''' + val + '''" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+        <!--//item-->''' + items
+    return html_begin + items + '</div>'
+
+
 def create_body(json_data) -> str:
     body_of_html = '''
     <body>
         <div class="wrapper">
             <div class="sidebar-wrapper">
                 <div class="profile-container">
-                    <img class="profile" src="assets/images/profile.png" alt="" />
+                    <img class="profile" src="''' + json_data['img_url'] + '''" alt="''' + json_data['name'] + '''" />
                     <h1 class="name">''' + json_data['name'] + '''</h1>
                     <h3 class="tagline">''' + json_data['headline'] + '''</h3>
                 </div>
@@ -161,76 +240,19 @@ def create_body(json_data) -> str:
                 <!--//section-->
     
                 <section class="section projects-section">
-                    <h2 class="section-title"><span class="icon-holder"><i class="fas fa-archive"></i></span>Projects</h2>
-                    <div class="intro">
-                        <p>You can list your side projects or open source libraries in this section. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum et ligula in nunc bibendum fringilla a eu lectus.</p>
-                    </div><!--//intro-->
-                    <div class="item">
-                        <span class="project-title"><a href="https://themes.3rdwavemedia.com/bootstrap-templates/startup/coderpro-bootstrap-5-startup-template-for-software-projects/" target="_blank">CoderPro</a></span> - <span class="project-tagline">A responsive website template designed to help developers launch their software projects. </span>
+                ''' + create_projects_items(json_data['projects']) + '''
+                </section>
+                <!--//section-->
     
-                    </div><!--//item-->
-                    <div class="item">
-                        <span class="project-title"><a href="https://themes.3rdwavemedia.com/bootstrap-templates/startup/launch-bootstrap-5-template-for-saas-businesses/" target="_blank">Launch</a></span> - <span class="project-tagline">A responsive website template designed to help startups promote their products or services.</span>
-                    </div><!--//item-->
-                    <div class="item">
-                        <span class="project-title"><a href="https://themes.3rdwavemedia.com/bootstrap-templates/resume/devcard-bootstrap-5-vcard-portfolio-template-for-software-developers/" target="_blank">DevCard</a></span> - <span class="project-tagline">A portfolio website template designed for software developers.</span>
-                    </div><!--//item-->
-                    <div class="item">
-                        <span class="project-title"><a href="https://themes.3rdwavemedia.com/bootstrap-templates/startup/bootstrap-template-for-mobile-apps-nova-pro/" target="_blank">Nova Pro</a></span> - <span class="project-tagline">A responsive Bootstrap theme designed to help app developers promote their mobile apps</span>
-                    </div><!--//item-->
-                    <div class="item">
-                        <span class="project-title"><a href="http://themes.3rdwavemedia.com/website-templates/responsive-bootstrap-theme-web-development-agencies-devstudio/" target="_blank">DevStudio</a></span> -
-                        <span class="project-tagline">A responsive website template designed to help web developers/designers market their services. </span>
-                    </div><!--//item-->
-                </section><!--//section-->
+                <section class="section projects-section">
+                ''' + create_certifications_items(json_data['certifications']) + '''
+                </section>
+                <!--//section-->
     
                 <section class="skills-section section">
-                    <h2 class="section-title"><span class="icon-holder"><i class="fas fa-rocket"></i></span>Skills &amp; Proficiency</h2>
-                    <div class="skillset">
-                        <div class="item">
-                            <h3 class="level-title">Python &amp; Django</h3>
-                            <div class="progress level-bar">
-                                <div class="progress-bar theme-progress-bar" role="progressbar" style="width: 99%" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div><!--//item-->
-    
-                        <div class="item">
-                            <h3 class="level-title">Javascript</h3>
-                            <div class="progress level-bar">
-                                <div class="progress-bar theme-progress-bar" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div><!--//item-->
-    
-                        <div class="item">
-                            <h3 class="level-title">React &amp; Angular</h3>
-                            <div class="progress level-bar">
-                                <div class="progress-bar theme-progress-bar" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div><!--//item-->
-    
-                        <div class="item">
-                            <h3 class="level-title">HTML5 &amp; CSS</h3>
-                            <div class="progress level-bar">
-                                    <div class="progress-bar theme-progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div><!--//item-->
-    
-                        <div class="item">
-                            <h3 class="level-title">Ruby on Rails</h3>
-                            <div class="progress level-bar">
-                                <div class="progress-bar theme-progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div><!--//item-->
-    
-                        <div class="item">
-                            <h3 class="level-title">Sketch &amp; Photoshop</h3>
-                            <div class="progress level-bar">
-                                <div class="progress-bar theme-progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div><!--//item-->
-    
-                    </div>
-                </section><!--//skills-section-->
+                ''' + create_skills_items(json_data['courses']) + ''' 
+                </section>
+                <!--//skills-section-->
     
             </div><!--//main-body-->
         </div>
@@ -248,13 +270,13 @@ def create_body(json_data) -> str:
     return body_of_html
 
 
-DIR = os.path.dirname(os.path.realpath(__file__))
-file = open('AlexandrShchetinin.json', encoding="utf8")
-data = json.load(file)
+def create_index_html():
+    file_location = os.path.dirname(os.path.realpath(__file__))
+    file = open('cv_data.json', encoding="utf8")
+    data = json.load(file)
+    file_name = file_location + '\OrbitThemeMaster\Orbit-Theme-master\index.html'
+    html_code = head_of_html + create_body(data)
+    with codecs.open(file_name, encoding='utf-8', mode='w') as html_file:
+        html_file.write(html_code)
 
-file_name = DIR + '\OrbitThemeMaster\Orbit-Theme-master\index.html'
-
-html_code = head_of_html + create_body(data)
-
-with codecs.open(file_name, encoding='utf-8', mode='w') as html_file:
-    html_file.write(html_code)
+create_index_html()
