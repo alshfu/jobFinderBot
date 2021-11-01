@@ -6,6 +6,7 @@ from Data.profile import Profile
 
 class Browser:
     def __init__(self):
+        self.delay = 300
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
         self.profile = Profile('1')
 

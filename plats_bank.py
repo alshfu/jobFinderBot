@@ -16,7 +16,7 @@ def go_to_ad_url(url, ad_id):
         try:
             open_link_in_chrome(url)
             update_ad_status_id(ad_id, 2)
-        except IndexError:
+        except:
             update_ad_status_id(ad_id, 1)
     else:
         pass
