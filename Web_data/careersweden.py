@@ -2,6 +2,7 @@ import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from time import sleep
 
 from Web_data.chrome import Browser
 
@@ -14,6 +15,7 @@ class Careersweden(Browser):
             _ = WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'tt-cookie-alert__accept-all')))
             self.driver.find_element(By.ID, 'tt-cookie-alert__accept-all').click()
             self.driver.find_elements(By.CLASS_NAME, 'btn-apply')[0].click()
+            sleep(3)
             ###########################################################################################################
             _ = WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'candidate_first_name')))
             self.driver.find_element(By.ID, 'candidate_first_name').send_keys(self.profile.get_f_name())
@@ -31,6 +33,4 @@ class Careersweden(Browser):
 
 if __name__ == '__main__':
     pass
-    # cs = Careersweden()
-    # url = "https://careersweden.knowit.se/jobs/967312-embedded-developer-to-join-our-automotive-team?promotion=182582-arbetsformedlingen"
-    # cs.careersweden_action(url)
+

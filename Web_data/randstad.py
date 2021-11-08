@@ -37,6 +37,6 @@ class Ranstad(Browser):
 
 if __name__ == '__main__':
     pass
-    cs = Ranstad()
-    url = "https://www.randstad.se/arbetssokande/jobb/ansok/cloud-developer-in-gothenburg-201365366/?jobsite=AMS&utm_source=AMS&utm_medium=jobboard"
-    cs.ranstad_action(url)
+    # cs = Ranstad()
+    # url = "https://www.randstad.se/arbetssokande/jobb/ansok/cloud-developer-in-gothenburg-201365366/?jobsite=AMS&utm_source=AMS&utm_medium=jobboard"
+    # cs.ranstad_action(url)

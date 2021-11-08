@@ -2,6 +2,7 @@
 from Web_data.academicwork import AcademicWork
 from Web_data.careersweden import Careersweden
 from Web_data.randstad import Ranstad
+from Web_data.wise import Wise
 
 
 def check_if_url_ready_to_be_used(url):
@@ -13,6 +14,9 @@ def check_if_url_ready_to_be_used(url):
         return True
     elif 'careersweden' in url:
         print("Careersweden")
+        return True
+    elif 'Wise' in url:
+        print("Wise")
         return True
     else:
         return False
@@ -27,6 +31,9 @@ def open_link_in_chrome(url):
         return True
     elif 'careersweden' in url:
         Careersweden().careersweden_action(url)
+        return True
+    elif 'wise' in url:
+        Wise().wise_action(url)
         return True
     else:
         print("No it is not ready for use")
